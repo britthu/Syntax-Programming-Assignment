@@ -8,7 +8,10 @@ arithmetic expressions */
 /* Variables */
 int charClass;
 char lexeme [100];
+char errorlist[100];
+int list_len = 0;
 char nextChar;
+//int i;
 int lexLen;
 int token;
 int nextToken;
@@ -41,7 +44,8 @@ void error();
 
 /******************************************************/
 /* main driver */
-void main() {
+int main() {
+
 /* Open the input data file and process its contents */
 	if ((in_fp = fopen("front.in", "r")) == NULL)
 		printf("ERROR - cannot open front.in \n");
@@ -52,6 +56,7 @@ void main() {
 			expr();
 		} while (nextToken != EOF);
 	}
+	return 0;
 }
 /*****************************************************/
 /* lookup - a function to lookup operators and parentheses
@@ -109,6 +114,8 @@ void getChar() {
 		else if (isdigit(nextChar))
 			charClass = DIGIT;
 		else charClass = UNKNOWN;
+		errorlist[list_len] = nextChar;
+		list_len = list_len + 1;
 	}
 	else
 		charClass = EOF;
@@ -164,6 +171,8 @@ int lex() {
 			lexeme[3] = 0;
 			break;
 	} /* End of switch */
+	//errorlist[list_len] = lexeme;
+	//list_len++;
 	printf("Next token is: %d, Next lexeme is %s\n",nextToken, lexeme);
 	return nextToken;
 } /* End of function lex */
@@ -231,11 +240,15 @@ parenthesis */
 	else
 		error();
 	} /* End of else */
-	printf("Exit <factor>\n");;
+	printf("Exit <factor>\n");
 } /* End of function factor */
 
 void error(){
 	//show where error occurs and print all lexemes up to this point.
-
+	printf("\n");
+	printf("The lexemes up until this error are:\n");
+	for (int i = 0; i < list_len; i = i + 1 ){
+		printf("%c\n", errorlist[i]);
+	}
 	printf("Error has occured at this point.\n");
 }
