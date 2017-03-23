@@ -15,6 +15,8 @@ char nextChar;
 int lexLen;
 int token;
 int nextToken;
+int index_of_line;
+char * buffer;
 FILE *in_fp, *fopen();
 
 /* Function declarations */
@@ -44,12 +46,14 @@ void error();
 
 /******************************************************/
 /* main driver */
-int main() {
-
+int main(argc, const char* argv[]) {
+ssize_t inline;
+size_t bufsize = 0;
 /* Open the input data file and process its contents */
-	if ((in_fp = fopen("front.in", "r")) == NULL)
+	if ((in_fp = fopen(argv[1], "r")) == NULL)
 		printf("ERROR - cannot open front.in \n");
 	else {
+		while((inline = getline(buffer, bufsize, in_fp)) != -1)
 		getChar();
 		do {
 			lex();
