@@ -49,6 +49,7 @@ void main() {
 		getChar();
 		do {
 			lex();
+			expr();
 		} while (nextToken != EOF);
 	}
 }
@@ -235,4 +236,6 @@ parenthesis */
 
 void error(){
 	//show where error occurs and print all lexemes up to this point.
+
+	printf("Error has occured at this point.\n");
 }
