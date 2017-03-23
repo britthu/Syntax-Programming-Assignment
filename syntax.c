@@ -46,20 +46,26 @@ void error();
 
 /******************************************************/
 /* main driver */
-int main(argc, const char* argv[]) {
+int main(int argc, const char* argv[]) {
 ssize_t inline;
 size_t bufsize = 0;
 /* Open the input data file and process its contents */
-	if ((in_fp = fopen(argv[1], "r")) == NULL)
+	if (((in_fp = fopen(argv[1], "r")) == NULL)
 		printf("ERROR - cannot open front.in \n");
 	else {
-		while((inline = getline(buffer, bufsize, in_fp)) != -1)
-		getChar();
-		do {
-			lex();
-			expr();
-		} while (nextToken != EOF);
+		while(((inline = getline(buffer, bufsize, in_fp)) != -1){
+			index_of_line = 0;
+			getChar();
+			do {
+				lex();
+				expr();
+			} while (nextToken != EOF);
+		}
 	}
+	fclose(in_fp);
+	if (buffer)
+		free(buffer);
+
 	return 0;
 }
 /*****************************************************/
