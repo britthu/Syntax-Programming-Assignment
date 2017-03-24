@@ -126,8 +126,9 @@ void getChar() {
 		else if (isdigit(nextChar))
 			charClass = DIGIT;
 		else charClass = UNKNOWN;
-		errorlist[list_len] = nextChar;//add to error list array
-		list_len = list_len + 1;//increment
+		/*errorlist[list_len] = nextChar;//add to error list array
+		list_len = list_len + 1;//increment*/
+	}
 	else
 		charClass = EOF;
 	index_of_line ++;
@@ -140,6 +141,8 @@ character */
 void getNonBlank() {
 	while (isspace(nextChar))
 		getChar();
+		errorlist[list_len] = nextChar;//add to error list array
+		list_len = list_len + 1;//increment
 }
 /*
 *****************************************************/
@@ -262,5 +265,5 @@ void error(){
 	for (int i = 0; i < list_len; i = i + 1 ){
 		printf("%c", errorlist[i]);//print the exprerssion so far
 	}
-	printf("\nError has occured at %c.\n", errorlist[list_len-4]);//print the term which cause error
+	printf("\nError has occured at %c.\n", errorlist[list_len-1]);//print the term which cause error
 }
