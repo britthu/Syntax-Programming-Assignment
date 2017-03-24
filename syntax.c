@@ -3,20 +3,21 @@ arithmetic expressions */
 
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 /* Global declarations */
 /* Variables */
 int charClass;
 char lexeme [100];
 char errorlist[100];
-int list_len = 0;
+int list_len=0;
 char nextChar;
 //int i;
 int lexLen;
 int token;
 int nextToken;
 int index_of_line;
-char * buffer;
+char * buffer = NULL;
 FILE *in_fp, *fopen();
 
 /* Function declarations */
@@ -47,23 +48,24 @@ void error();
 /******************************************************/
 /* main driver */
 int main(int argc, const char* argv[]) {
-ssize_t inline;
+ssize_t line_reader;//hold line that's read in
 size_t bufsize = 0;
 /* Open the input data file and process its contents */
-	if (((in_fp = fopen(argv[1], "r")) == NULL)
+	if ((in_fp = fopen(argv[1], "r")) == NULL)
 		printf("ERROR - cannot open front.in \n");
 	else {
-		while(((inline = getline(buffer, bufsize, in_fp)) != -1){
+		while((line_reader = getline(&buffer,&bufsize,in_fp)) != -1){//gets line from file
 			index_of_line = 0;
+			list_len = 0;//initialize error list array back to 0 for each line
 			getChar();
-			do {
+			do {//then pasre expression
 				lex();
 				expr();
 			} while (nextToken != EOF);
 		}
 	}
 	fclose(in_fp);
-	if (buffer)
+	if (buffer)//memory clean up
 		free(buffer);
 
 	return 0;
@@ -118,17 +120,17 @@ void addChar() {
 /* getChar - a function to get the next character of
 input and determine its character class */
 void getChar() {
-	if ((nextChar = getc(in_fp)) != EOF) {
+	if ((nextChar = buffer[index_of_line]) != '\0') {//while not end of string continue
 		if (isalpha(nextChar))
 			charClass = LETTER;
 		else if (isdigit(nextChar))
 			charClass = DIGIT;
 		else charClass = UNKNOWN;
-		errorlist[list_len] = nextChar;
-		list_len = list_len + 1;
-	}
+		errorlist[list_len] = nextChar;//add to error list array
+		list_len = list_len + 1;//increment
 	else
 		charClass = EOF;
+	index_of_line ++;
 }
 /*****************************************************/
 /* getNonBlank - a function to call getChar until it
@@ -256,9 +258,9 @@ parenthesis */
 void error(){
 	//show where error occurs and print all lexemes up to this point.
 	printf("\n");
-	printf("The lexemes up until this error are:\n");
+	printf("Error has occured. Epression (%s) so far is as follows:\n",buffer );//print line in which error occured
 	for (int i = 0; i < list_len; i = i + 1 ){
-		printf("%c\n", errorlist[i]);
+		printf("%c", errorlist[i]);//print the exprerssion so far
 	}
-	printf("Error has occured at this point.\n");
+	printf("\nError has occured at %c.\n", errorlist[list_len-4]);//print the term which cause error
 }
