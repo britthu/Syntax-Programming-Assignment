@@ -62,6 +62,7 @@ size_t bufsize = 0;
 				lex();
 				expr();
 			} while (nextToken != EOF);
+			printf("\n");
 		}
 	}
 	fclose(in_fp);
